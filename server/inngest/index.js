@@ -7,10 +7,10 @@ export const inngest = new Inngest({ id: "pingup-app" });
 // Inngest Function to save user data to a database
 const syncUserCreation = inngest.createFunction(
   { id: "sync-user-from-clerk" },
-  { envent: "clerk/user.created" },
-  async ({ envent }) => {
+  { event: "clerk/user.created" },
+  async ({ event }) => {
     const { id, first_name, last_name, email_addresses, image_url } =
-      envent.data;
+      event.data;
     let username = email_addresses[0].email_address.split("@")[0];
 
     // Check availability of username
@@ -33,10 +33,10 @@ const syncUserCreation = inngest.createFunction(
 // Inngest Function to update user data to a database
 const syncUserUpdation = inngest.createFunction(
   { id: "update-user-from-clerk" },
-  { envent: "clerk/user.updated" },
-  async ({ envent }) => {
+  { event: "clerk/user.updated" },
+  async ({ event }) => {
     const { id, first_name, last_name, email_addresses, image_url } =
-      envent.data;
+      event.data;
 
     const updateUserData = {
       email: email_addresses[0].email_address,
@@ -50,9 +50,9 @@ const syncUserUpdation = inngest.createFunction(
 // Inngest Function to update user data to a database
 const syncUserDeletion = inngest.createFunction(
   { id: "delete-user-from-clerk" },
-  { envent: "clerk/user.deleted" },
-  async ({ envent }) => {
-    const { id } = envent.data;
+  { event: "clerk/user.deleted" },
+  async ({ event }) => {
+    const { id } = event.data;
 
     await User.findByIdAndDelete(id);
   }
